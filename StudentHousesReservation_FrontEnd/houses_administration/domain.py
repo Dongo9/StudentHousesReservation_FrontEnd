@@ -35,12 +35,27 @@ class Student:
     name: str
     surname: str
     is_beneficiary: bool
+    pin: str
 
     def __post_init__(self):
         validate_dataclass(self)
         validate('matriculation_number', self.matriculation_number, min_len=6, max_len=6, custom=pattern(r'[0-9]{6}'))
         validate('name', self.name, min_len=3, max_len=15, custom_name=pattern(r'[A-Za-z\s]+'))
         validate('surname', self.surname, min_len=3, max_len=25, custom_name=pattern(r'[A-Za-z\s]+'))
+        validate('pin', self.pin, min_len=3, max_len=25, custom_name=pattern(r'[0-9]+'))
+
+    def __str__(self):
+        return 'matriculation number:' + self.matriculation_number + '  student name: ' + self.name + ' ' + self.surname
+
+
+class Administrator:
+    matriculation_number: int
+    pin: str
+
+    def __post_init__(self):
+        validate_dataclass(self)
+        validate('matriculation_number', self.matriculation_number, min_len=6, max_len=6, custom=pattern(r'[0-9]{6}'))
+        validate('pin', self.pin, min_len=3, max_len=25, custom_name=pattern(r'[0-9]+'))
 
     def __str__(self):
         return 'matriculation number:' + self.matriculation_number + '  student name: ' + self.name + ' ' + self.surname
@@ -49,12 +64,11 @@ class Student:
 @typechecked
 @dataclass(frozen=True, order=True)
 class Bed:
-
     room_number: int
     bed_number: int
     room_type: RoomType
     has_private_bathroom: bool
-    student: Student = None #DOVREBBE ESSERE LECITO
+    student: Student = None  # DOVREBBE ESSERE LECITO
 
     def __post_init__(self):
         validate_dataclass(self)
@@ -107,10 +121,10 @@ class Neighbourhood:
     def __post_init__(self):
         validate_dataclass(self)
 
-    def apartments(self) -> int: #RITORNA NUMERO DI APPARTAMENTI NEL QUARTIERE
+    def apartments(self) -> int:  # RITORNA NUMERO DI APPARTAMENTI NEL QUARTIERE
         return len(self.__apartments)
 
-    def apartment(self, index: int) -> Apartment: #RITORNA APPARTAMENTO X IN UN QUARTIERE
+    def apartment(self, index: int) -> Apartment:  # RITORNA APPARTAMENTO X IN UN QUARTIERE
         validate('index', index, min_value=0, max_value=self.apartments() - 1)
         return self.__apartments[index]
 
