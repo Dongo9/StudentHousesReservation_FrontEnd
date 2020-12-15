@@ -113,8 +113,31 @@ class Database:
     def number_of_reservations(self) -> int:
         return len(self.__reservations)
 
+    def students_size(self) -> int:
+        return len(self.__students)
+
+    def admins_size(self) -> int:
+        return len(self.__admins)
+
+    def add_reservation(self, stud: str, res: Reservation) -> None:
+        self.__reservations[stud] = res
+
+    def add_student(self, stud: Student) -> None:
+        self.__students.append(stud)
+
+    def add_admin(self, adm: Admin) -> None:
+        self.__admins.append(adm)
+
     def reservations(self) -> Dict[str, Reservation]:
         return self.__reservations.copy()  # PER EVITARE MANOMISSIONI ESTERNE (COME CLONE IN JAVA)
+
+    def student(self, index: int) -> Student:
+        validate('index', index, min_value=0, max_value=self.students_size() - 1)
+        return self.__students[index]
+
+    def admin(self, index: int) -> Admin:
+        validate('index', index, min_value=0, max_value=self.admins_size() - 1)
+        return self.__admins[index]
 
     def has_already_reservation(self, stud: str) -> bool:
         if stud in self.__reservations:
@@ -125,25 +148,3 @@ class Database:
         validate('matriculation', matriculation, is_in=self.__reservations)
         return self.__reservations[matriculation]
 
-    def add_reservation(self, stud: str, res: Reservation) -> None:
-        self.__reservations[stud] = res
-
-    def add_student(self, stud: Student) -> None:
-        self.__students.append(stud)
-
-    def students_size(self) -> int:
-        return len(self.__students)
-
-    def student(self, index: int) -> Student:
-        validate('index', index, min_value=0, max_value=self.students_size() - 1)
-        return self.__students[index]
-
-    def add_admin(self, adm: Admin) -> None:
-        self.__admins.append(adm)
-
-    def admins_size(self) -> int:
-        return len(self.__admins)
-
-    def admin(self, index: int) -> Admin:
-        validate('index', index, min_value=0, max_value=self.admins_size() - 1)
-        return self.__admins[index]
