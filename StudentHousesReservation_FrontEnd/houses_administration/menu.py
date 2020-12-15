@@ -1,8 +1,10 @@
+import os
+import sys
 from dataclasses import field, InitVar, dataclass
 from typing import Callable, List, Dict, Optional, Any
 
 from typeguard import typechecked
-from valid8 import validate
+from valid8 import validate, ValidationError
 
 from StudentHousesReservation_FrontEnd.validation.dataclasses import validate_dataclass
 from StudentHousesReservation_FrontEnd.validation.regex import pattern
@@ -15,7 +17,7 @@ class Description:
 
     def __post_init__(self):
         validate_dataclass(self)
-        validate('Description.value', self.value, min_len=1, max_len=10000)#, custom=pattern(r'[0-9A-Za-z ;.,_-]*'))
+        validate('Description.value', self.value, min_len=1, max_len=10000)  # , custom=pattern(r'[0-9A-Za-z ;.,_-]*'))
 
     def __str__(self):
         return self.value
@@ -93,6 +95,9 @@ class Menu:
                 return entry.is_exit
             except (KeyError, TypeError, ValueError):
                 print('Invalid selection. Please, try again...')
+            #except ValidationError: #A CAUSA DELLA VALIDATION SONO DOVUTO INTERVENIRE --> MA SICCOME NON MI DEVO REGISTRARE, E' FONDAMENTALE SOLLEVARE ECCEZIONE?
+            #    print('Illegal access detected!')
+            #    os._exit(0)
 
     def run(self) -> None:
         while True:

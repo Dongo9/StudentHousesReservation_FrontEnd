@@ -1,132 +1,149 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List
+from typing import List, Dict
 
 from typeguard import typechecked
 from valid8 import validate
 
 from StudentHousesReservation_FrontEnd.validation.dataclasses import validate_dataclass
-
 from StudentHousesReservation_FrontEnd.validation.regex import pattern
 
 
-class RoomType(Enum):
-    SINGLE = 1
-    DOUBLE = 2
+class Room(Enum):
+    SINGLE = 'SINGLE'
+    DOUBLE = 'DOUBLE'
+
+    @classmethod
+    def has_value(cls, value):
+        return value in cls._value2member_map_
 
 
-class NeighbourhoodName(Enum):
-    NERVOSO = 'Nervoso',
-    MARTENSSON_A = 'MartenssonA',
-    MARTENSSON_B = 'MartenssonB',
-    MOLICELLE_A = 'MolicelleA',
-    MOLICELLE_B = 'MolicelleB',
-    MAISONETTES = 'Maisonettes',
-    CHIODO_1 = 'Chiodo1',
-    CHIODO_2 = 'Chiodo2',
-    MONACI = 'Monaci',
-    SAN_GENNARO = 'SanGennaro',
+class Neighbourhood(Enum):
+    NERVOSO = 'NERVOSO'
+    MARTENSSONA = 'MARTENSSONA'
+    MARTENSSONB = 'MARTENSSONB'
+    MOLICELLEA = 'MOLICELLEA'
+    MOLICELLEB = 'MOLICELLEB'
+    MAISONETTES = 'MAISONETTES'
+    CHIODO1 = 'CHIODO1'
+    CHIODO2 = 'CHIODO2'
+    MONACI = 'MONACI'
+    SANGENNARO = 'SANGENNARO'
 
-
-@typechecked
-@dataclass(frozen=True, order=True)
-class Student:
-    matriculation_number: int
-    name: str
-    surname: str
-    is_beneficiary: bool
-    pin: str
-
-    def __post_init__(self):
-        validate_dataclass(self)
-        validate('matriculation_number', self.matriculation_number, min_len=6, max_len=6, custom=pattern(r'[0-9]{6}'))
-        validate('name', self.name, min_len=3, max_len=15, custom_name=pattern(r'[A-Za-z\s]+'))
-        validate('surname', self.surname, min_len=3, max_len=25, custom_name=pattern(r'[A-Za-z\s]+'))
-        validate('pin', self.pin, min_len=3, max_len=25, custom_name=pattern(r'[0-9]+'))
-
-    def __str__(self):
-        return 'matriculation number:' + self.matriculation_number + '  student name: ' + self.name + ' ' + self.surname
-
-
-class Administrator:
-    matriculation_number: int
-    pin: str
-
-    def __post_init__(self):
-        validate_dataclass(self)
-        validate('matriculation_number', self.matriculation_number, min_len=6, max_len=6, custom=pattern(r'[0-9]{6}'))
-        validate('pin', self.pin, min_len=3, max_len=25, custom_name=pattern(r'[0-9]+'))
-
-    def __str__(self):
-        return 'matriculation number:' + self.matriculation_number + '  student name: ' + self.name + ' ' + self.surname
-
-
-@typechecked
-@dataclass(frozen=True, order=True)
-class Bed:
-    room_number: int
-    bed_number: int
-    room_type: RoomType
-    has_private_bathroom: bool
-    student: Student = None  # DOVREBBE ESSERE LECITO
-
-    def __post_init__(self):
-        validate_dataclass(self)
-        validate('room_number', self.room_number, min_len=1, max_len=1, custom=pattern(r'[1-6]'))
-        validate('bed_number', self.bed_number, min_len=1, max_len=1, custom=pattern(r'[1-2]'))
-
-    def __str__(self):
-        return 'Room number: ' + self.room_number + '  n. of beds' + self.bed_number + '  type of room' + self.room_type
+    @classmethod
+    def has_value(cls, value):
+        return value in cls._value2member_map_
 
 
 @typechecked
 @dataclass(frozen=True, order=True)
 class Apartment:
-    id: str
-    bathrooms_number: int
-    couches_number: int
-    armchairs_number: int
-    floor: int
-
-    __beds: List[Bed] = field(default_factory=list, init=False)
+    name: str
+    rooms: List[Room] = field(default_factory=list, init=False)
 
     def __post_init__(self):
         validate_dataclass(self)
-        validate('id', self.id, min_len=2, max_len=3, custom=pattern(r'[A-Z][1-9]{1,2}'))
-        validate('bathrooms_number', self.bathrooms_number, min_len=1, max_len=1, custom=pattern(r'[1-6]'))
-        validate('armachairs_number', self.armchairs_number, min_len=1, max_len=1, custom=pattern(r'[1-3]'))
-        validate('floor', self.floor, min_len=1, max_len=1, pattern=r'[0-6]')
-
-    def beds(self) -> int:
-        return len(self.__beds)
-
-    def bed(self, index: int) -> Bed:
-        validate('index', index, min_value=0, max_value=self.beds() - 1)
-        return self.__beds[index]
-
-    def __str__(self):
-        return self.id + ' ' + '  n. of bathrooms: ' + self.bathrooms_number \
-               + '  n. of couches: ' + self.couches_number \
-               + '  n. of sofas: ' + self.armchairs_number \
-               + '  floor: ' + self.floor
+        validate('name', self.name, min_len=2, max_len=3, custom=pattern(r'[A-Z][1-9]{1,2}'))
 
 
 @typechecked
 @dataclass(frozen=True, order=True)
-class Neighbourhood:
-    name: NeighbourhoodName
-
-    __apartments: List[Apartment] = field(default_factory=list, init=False)  # RIGUARDARE L'INIT
+class Admin:
+    matriculation_number: str
+    password: str
 
     def __post_init__(self):
         validate_dataclass(self)
-
-    def apartments(self) -> int:  # RITORNA NUMERO DI APPARTAMENTI NEL QUARTIERE
-        return len(self.__apartments)
-
-    def apartment(self, index: int) -> Apartment:  # RITORNA APPARTAMENTO X IN UN QUARTIERE
-        validate('index', index, min_value=0, max_value=self.apartments() - 1)
-        return self.__apartments[index]
+        validate('matriculation_number', self.matriculation_number, min_len=6, max_len=6, custom=pattern(r'[0-9]+'))
+        validate('password', self.password, min_len=10, max_len=15, custom=pattern(r'[A-Za-z.0-9]+'))
 
     def __str__(self):
-        return 'Neighbourhood name: ' + self.name
+        return self.matriculation_number + ' ' + self.password
+
+    def __eq__(self, other):
+        if self.matriculation_number == other.matriculation_number and self.password == other.password:
+            return True
+        return False
+
+
+@typechecked
+@dataclass(frozen=True, order=True)
+class Student:
+    matriculation_number: str
+    password: str
+
+    def __post_init__(self):
+        validate_dataclass(self)
+        validate('matriculation_number', self.matriculation_number, min_len=6, max_len=6, custom=pattern(r'[0-9]+'))
+        validate('password', self.password, min_len=10, max_len=15, custom=pattern(r'[A-Za-z.0-9]+'))
+
+    def __str__(self):
+        return self.matriculation_number + ' ' + self.password
+
+    def __eq__(self, other):
+        if self.matriculation_number == other.matriculation_number and self.password == other.password:
+            return True
+        return False
+
+
+@typechecked
+@dataclass(frozen=True, order=True)
+class Reservation:
+    neighbourhood: str
+    room: str
+
+    def __post_init__(self):
+        validate_dataclass(self)
+        validate('neighbourhood', self.neighbourhood, is_in=Neighbourhood.__members__)
+        validate('room_type', self.room, is_in=Room.__members__)
+
+    def __str__(self):
+        return self.neighbourhood + ' ' + self.room
+
+
+@typechecked
+@dataclass(frozen=True)
+class Database:
+    __reservations: Dict[str, Reservation] = field(default_factory=dict, repr=False, init=False)
+
+    __students: List[Student] = field(default_factory=list, init=False)
+
+    __admins: List[Admin] = field(default_factory=list, init=False)
+
+    def number_of_reservations(self) -> int:
+        return len(self.__reservations)
+
+    def reservations(self) -> Dict[str, Reservation]:
+        return self.__reservations.copy()  # PER EVITARE MANOMISSIONI ESTERNE (COME CLONE IN JAVA)
+
+    def has_already_reservation(self, stud: str) -> bool:
+        if stud in self.__reservations:
+            return True
+        return False
+
+    def get_personal_reservation(self, matriculation: str) -> Reservation:
+        validate('matriculation', matriculation, is_in=self.__reservations)
+        return self.__reservations[matriculation]
+
+    def add_reservation(self, stud: str, res: Reservation) -> None:
+        self.__reservations[stud] = res
+
+    def add_student(self, stud: Student) -> None:
+        self.__students.append(stud)
+
+    def students_size(self) -> int:
+        return len(self.__students)
+
+    def student(self, index: int) -> Student:
+        validate('index', index, min_value=0, max_value=self.students_size() - 1)
+        return self.__students[index]
+
+    def add_admin(self, adm: Admin) -> None:
+        self.__admins.append(adm)
+
+    def admins_size(self) -> int:
+        return len(self.__admins)
+
+    def admin(self, index: int) -> Admin:
+        validate('index', index, min_value=0, max_value=self.admins_size() - 1)
+        return self.__admins[index]
