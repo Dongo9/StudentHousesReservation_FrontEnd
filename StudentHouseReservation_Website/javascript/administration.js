@@ -63,3 +63,7 @@ function showUserList() {
         }
     });
 }
+
+function boom() {
+	alert("BOOM")
+}

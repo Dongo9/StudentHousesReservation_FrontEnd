@@ -40,12 +40,58 @@ function showReservation() {
 			else
 			{
 				response.forEach(element => {
-					var tag1 = '<p value="' + element.neighborhood + '">' + element.neighborhood + '</p>'
-					$('#current-neighborhood').append(tag1)
-					var tag2 = '<p value="' + element.room_type + '">' + element.room_type + '</p>'
-					$('#current-roomtype').append(tag2)
-					var idtag='<p id="reservation_id" value="' + element.id + '"></p>'
-					$('#res_id').append(idtag)
+					switch (element.neighborhood) {
+					  case 'MTA':
+						var tag1 = '<p value="' + element.neighborhood + '"> MARTENSSON A </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					  case 'MTB':
+						var tag1 = '<p value="' + element.neighborhood + '"> MARTENSSON B </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					  case 'CH1':
+						var tag1 = '<p value="' + element.neighborhood + '"> CHIODO 1 </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					  case 'CH2':
+						var tag1 = '<p value="' + element.neighborhood + '"> CHIODO 2 </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					  case 'MSN':
+						var tag1 = '<p value="' + element.neighborhood + '"> MAISONETTES </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					  case 'NRV':
+						var tag1 = '<p value="' + element.neighborhood + '"> NERVOSO </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					  case 'MON':
+						var tag1 = '<p value="' + element.neighborhood + '"> MONACI </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					  case 'SNG':
+						var tag1 = '<p value="' + element.neighborhood + '"> SAN GENNARO </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					  case 'MLA':
+						var tag1 = '<p value="' + element.neighborhood + '"> MOLICELLE A </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					  case 'MLB':
+						var tag1 = '<p value="' + element.neighborhood + '"> MOLICELLE B </p>'
+						$('#current-neighborhood').append(tag1)
+						break;
+					}
+					switch (element.room_type) {
+					  case 'SIN':
+						var tag2 = '<p value="' + element.room_type + '"> SINGLE </p>'
+						$('#current-roomtype').append(tag2)
+						break;
+					  case 'DBL':
+						var tag2 = '<p value="' + element.room_type + '"> DOUBLE </p>'
+						$('#current-roomtype').append(tag2)
+						break;
+					}
 				});
 			}
         },
@@ -56,90 +102,6 @@ function showReservation() {
     });
 }
 
-function editReservationDEBUG() {
-	var reservation_id = 9
-	
-	alert("reservation_id:"+ reservation_id)
-	
-	var neighborhood = $('#neighborhood').val()
-	alert(neighborhood)
-    var room_type
-	if($('#roomtype1').is(':checked'))
-	{
-		room_type = $('#roomtype1').val()
-	}
-	else
-	{
-		room_type = $('#roomtype2').val()
-	}
-	alert(room_type)
-    $.ajax({
-        type: 'PUT',
-        url: 'http://localhost:8000/api/v1/reservation-student/edit/' + reservation_id + '/',
-		headers: {
-		'X-CSRFToken': cookieValue = document.cookie
-			.split('; ')
-			.find(row => row.startsWith('csrftoken'))
-			.split('=')[1]
-        },
-        dataType: 'json',
-        contentType: 'application/json; charset=UTF-8',
-        data: JSON.stringify({
-            neighborhood: neighborhood,
-            room_type: room_type
-        }),
-        xhrFields: {
-            withCredentials: true
-        },
-        success: function (response) {
-            location.reload()
-        },
-        error: function () {
-        }
-    });
-}
-
-function addReservationDEBUG() {
-	var neighborhood = $('#neighborhood').val()
-    var room_type
-	if($('#roomtype1').is(':checked'))
-	{
-		room_type = $('#roomtype1').val()
-	}
-	else
-	{
-		room_type = $('#roomtype2').val()
-	}
-    $.ajax({
-        type: 'POST',
-        url: 'http://localhost:8000/api/v1/reservation-student/add/',
-		headers: {
-		'X-CSRFToken': cookieValue = document.cookie
-			.split('; ')
-			.find(row => row.startsWith('csrftoken'))
-			.split('=')[1]
-        },
-        dataType: 'json',
-        contentType: 'application/json; charset=UTF-8',
-        data: JSON.stringify({
-            neighborhood: neighborhood,
-            room_type: room_type
-        }),
-        xhrFields: {
-            withCredentials: true
-        },
-        success: function (response) {
-            location.reload()
-        },
-        error: function () {
-        }
-    });
-}
-
-
-
-
-//DEBUGGGGGGGGGGGGGGGGGG
 function updateReservation() {
 		$.ajax({
         type: 'GET',
@@ -181,7 +143,6 @@ function editReservation(r_id) {
 	{
 		room_type = $('#roomtype2').val()
 	}
-	alert(room_type)
     $.ajax({
         type: 'PUT',
         url: 'http://localhost:8000/api/v1/reservation-student/edit/' + reservation_id + '/',
@@ -204,11 +165,11 @@ function editReservation(r_id) {
             location.reload()
         },
         error: function () {
+			alert("Something bad happened to your reservation update")
         }
     });
 }
 
-//FUNZIONA
 function addReservation() {
 	var neighborhood = $('#neighborhood').val()
 	alert(neighborhood)
@@ -244,6 +205,7 @@ function addReservation() {
             location.reload()
         },
         error: function () {
+			alert("Something bad happened to your reservation update")
         }
     });
 }
