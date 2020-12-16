@@ -13,10 +13,6 @@ class Room(Enum):
     SINGLE = 'SINGLE'
     DOUBLE = 'DOUBLE'
 
-    @classmethod
-    def has_value(cls, value):
-        return value in cls._value2member_map_
-
 
 class Neighbourhood(Enum):
     NERVOSO = 'NERVOSO'
@@ -29,10 +25,6 @@ class Neighbourhood(Enum):
     CHIODO2 = 'CHIODO2'
     MONACI = 'MONACI'
     SANGENNARO = 'SANGENNARO'
-
-    @classmethod
-    def has_value(cls, value):
-        return value in cls._value2member_map_
 
 
 @typechecked
@@ -147,4 +139,3 @@ class Database:
     def get_personal_reservation(self, matriculation: str) -> Reservation:
         validate('matriculation', matriculation, is_in=self.__reservations)
         return self.__reservations[matriculation]
-

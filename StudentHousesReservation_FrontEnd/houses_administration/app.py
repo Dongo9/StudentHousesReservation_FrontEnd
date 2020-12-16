@@ -26,8 +26,21 @@ class App:
             .with_entry(Entry.create('0', 'Exit', on_selected=lambda: print('Bye!'), is_exit=True)) \
             .build()
         self.__database = Database()
-        self.__load_students()
-        self.__load_admins()
+        try:
+            self.__load_students()
+        except ValueError as e:
+            #print(e)
+            print('--------------------------------------------')
+            print('Continuing with an empty list of students...')
+            print('--------------------------------------------')
+
+        try:
+            self.__load_admins()
+        except ValueError as e:
+            #print(e)
+            print('------------------------------------------')
+            print('Continuing with an empty list of admins...')
+            print('------------------------------------------')
         self.__logged_in_student = None
 
     ################################################################ STUDENT ####################################################################
@@ -41,9 +54,9 @@ class App:
                 self.__logged_in_student = student.matriculation_number
                 self.__switch_to_students_menu()
             else:
-                print('No credentials found for this student')
+                print('No account found with this credentials')
                 print()
-        except (ValidationError, ValueError, TypeError): #AGGIUNGO QUI L'ECCEZIONE
+        except (ValidationError, ValueError, TypeError):  # AGGIUNGO QUI L'ECCEZIONE
             print('Access failed: please, choose to login and retry with correct credentials...')
             print()
             # os._exit(0)
@@ -115,17 +128,23 @@ class App:
     ########################################### ADMIN ####################################################
 
     def __admins_login(self) -> None:
-        admin = Admin(*self.__read_admin_credentials())
-        if self.__check_admin_credentials(admin):
-            print('Successful access')
-            self.__switch_to_admins_menu()
-        else:
-            print('Access failed, please retry with correct credentials...')
+        try:
+            admin = self.__read_admin_credentials()
+            if self.__check_admin_credentials(admin):
+                print('Successful login')
+                print()
+                self.__switch_to_admins_menu()
+            else:
+                print('No account found with this credentials')
+                print()
+        except (ValidationError, ValueError, TypeError):  # AGGIUNGO QUI L'ECCEZIONE
+            print('Access failed: please, choose to login and retry with correct credentials...')
+            print()
 
-    def __read_admin_credentials(self) -> Tuple[str, str]:
+    def __read_admin_credentials(self) -> Admin:
         matriculation_number = self.__read('Matriculation Number', str)
         password = self.__read('Password', str)
-        return matriculation_number, password
+        return Admin(matriculation_number, password)
 
     def __check_admin_credentials(self, admin: Admin) -> bool:
         for i in range(self.__database.admins_size()):
@@ -183,9 +202,10 @@ class App:
         try:
             self.__load()
         except ValueError as e:
-            print(e)
+            # print(e)
+            print('------------------------------------------------')
             print('Continuing with an empty list of reservations...')
-
+            print('------------------------------------------------')
         self.__menu.run()
 
     def run(self) -> None:
@@ -237,16 +257,16 @@ class App:
 
     def __read_reservation(self) -> Reservation:
         neighbourhood = self.__read('Neighbourhood (choose between these ones):\n'
-                                        'NERVOSO\n'
-                                        'MARTENSSONA\n'
-                                        'MARTENSSONB\n'
-                                        'MOLICELLEA\n'
-                                        'MOLICELLEB\n'
-                                        'MAISONETTES\n'
-                                        'CHIODO1\n'
-                                        'CHIODO2\n'
-                                        'MONACI\n'
-                                        'SANGENNARO\n', str)
+                                    'NERVOSO\n'
+                                    'MARTENSSONA\n'
+                                    'MARTENSSONB\n'
+                                    'MOLICELLEA\n'
+                                    'MOLICELLEB\n'
+                                    'MAISONETTES\n'
+                                    'CHIODO1\n'
+                                    'CHIODO2\n'
+                                    'MONACI\n'
+                                    'SANGENNARO\n', str)
         room_type = self.__read('Room (choose between SINGLE AND DOUBLE): ', str)
         return Reservation(neighbourhood, room_type)
 

@@ -83,47 +83,51 @@ def test_student_str():
 
 
 def test_reservation_neighbho_in_list():
-    Reservation('NERVOSO','SINGLE')
+    Reservation('NERVOSO', 'SINGLE')
     wrong_values = ['', 'NERVOSA', '123', '!"dsda', 'nervoso', '1']
     for value in wrong_values:
         with pytest.raises(ValidationError):
             Reservation(value, 'SINGLE')
 
+
 def test_reservation_room_in_list():
-    Reservation('NERVOSO','SINGLE')
+    Reservation('NERVOSO', 'SINGLE')
     wrong_values = ['', '1', 'SINGOLA', '!"£SIN34', 'single']
     for value in wrong_values:
         with pytest.raises(ValidationError):
             Reservation('NERVOSO', value)
 
+
 def test_reservation_str():
-    re = Reservation('NERVOSO','SINGLE')
-    assert re.__str__() =='NERVOSO SINGLE'
+    re = Reservation('NERVOSO', 'SINGLE')
+    assert re.__str__() == 'NERVOSO SINGLE'
     assert not re.__str__() == 'NERVOSA SINGLE'
 
 
 @pytest.fixture
 def admins():
     return [
-        Admin('112233','12345678910'),
-        Admin('123456','1122334455'),
-        Admin('111222','10987654321'),
+        Admin('112233', '12345678910'),
+        Admin('123456', '1122334455'),
+        Admin('111222', '10987654321'),
     ]
+
 
 @pytest.fixture
 def students():
     return [
-        Student('112233','12345678910'),
-        Student('123456','1122334455'),
-        Student('111222','10987654321'),
+        Student('112233', '12345678910'),
+        Student('123456', '1122334455'),
+        Student('111222', '10987654321'),
     ]
+
 
 @pytest.fixture
 def preferences():
     return [
-        Reservation('NERVOSO','DOUBLE'),
-        Reservation('MARTENSSONA','SINGLE'),
-        Reservation('MOLICELLEA','SINGLE'),
+        Reservation('NERVOSO', 'DOUBLE'),
+        Reservation('MARTENSSONA', 'SINGLE'),
+        Reservation('MOLICELLEA', 'SINGLE'),
     ]
 
 
@@ -136,6 +140,7 @@ def test_database_add_student(students):
         assert db.students_size() == size
         assert db.student(size - 1) == student
 
+
 def test_database_add_admin(admins):
     db = Database()
     size = 0
@@ -145,7 +150,8 @@ def test_database_add_admin(admins):
         assert db.admins_size() == size
         assert db.admin(size - 1) == admin
 
-def test_database_add_reservations(students,preferences):
+
+def test_database_add_reservations(students, preferences):
     db = Database()
     size = 0
     keys = range(3)
@@ -154,13 +160,16 @@ def test_database_add_reservations(students,preferences):
         size += 1
         assert db.number_of_reservations() == size
 
+
 def test_database_has_already_reservation():
-    stud = Student('182959','12345678910')
-    r1 = Reservation('NERVOSO','DOUBLE')
+    stud = Student('182959', '12345678910')
+    r1 = Reservation('NERVOSO', 'DOUBLE')
     db = Database()
     db.add_reservation(stud.matriculation_number, r1)
     assert db.has_already_reservation(stud.matriculation_number)
+    assert not db.has_already_reservation('666777')
     assert db.get_personal_reservation(stud.matriculation_number).__str__() == r1.__str__()
+
 
 def test_database_validate_wrong_input():
     db = Database()
@@ -190,7 +199,6 @@ def test_database_validate_wrong_input():
     with pytest.raises(TypeError):
         db.student('asdsads')
 
-
     with pytest.raises(ValidationError):
         db.admin(-1)
     with pytest.raises(ValidationError):
@@ -202,10 +210,3 @@ def test_database_validate_wrong_input():
         db.get_personal_reservation('123')
     with pytest.raises(ValidationError):
         db.get_personal_reservation('123555')
-
-
-
-
-
-
-
