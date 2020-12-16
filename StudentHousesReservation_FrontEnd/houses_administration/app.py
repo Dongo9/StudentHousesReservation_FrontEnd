@@ -65,11 +65,19 @@ class App:
         if self.__database.has_already_reservation(self.__logged_in_student):
             print('Your new preferences will overwrite the previous ones, do you now? Y/N')
             val = input()
-            if val == 'N':
-                return
-            elif val == 'Y':
-                print('I, lets go!')
+            try:
+                validate('value', val, is_in=['Y', 'N'])
+                if val == 'N':
+                    print()
+                    return
+                elif val == 'Y':
+                    print('I, lets go!')
+                    print()
+            except ValidationError:
+                print('Invalid key entered, please choose to add a new reservation and retry with a correct one...')
                 print()
+                return
+
         try:
             reservation = self.__read_reservation()
             self.__database.add_reservation(self.__logged_in_student, reservation)  # SCRITTURA SU "DB"
@@ -176,7 +184,7 @@ class App:
             self.__load()
         except ValueError as e:
             print(e)
-            print('Continuing with an empty list of vehicles...')
+            print('Continuing with an empty list of reservations...')
 
         self.__menu.run()
 
