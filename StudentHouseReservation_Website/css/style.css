@@ -1,0 +1,88 @@
+body {
+  padding-top: 3rem;
+   background-image: linear-gradient(#080f15, #0f283e 40%, #29144c);
+}
+
+.my-card {
+	background-color: #f5f7ff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+	
+.card-max-width {
+	max-width: 400px;
+}
+
+.no-border-radius {
+	border-radius: 0rem;
+}
+
+#logo {
+    filter: invert(38%) sepia(59%) saturate(1226%) hue-rotate(685deg) brightness(126%) contrast(129%);
+	background-color: #01085624;
+}
+
+#logo-nav {
+    filter: invert(238%) sepia(59%) saturate(1226%) hue-rotate(685deg) brightness(326%) contrast(129%);
+	padding: 0.4rem;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #ff4242;
+    border-color: #8a0000;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+	color: #fff;
+    background-color: #f32242;
+    border-color: #6a0000;
+	box-shadow: 0 0 0 0.25rem rgb(253 49 49 / 50%);
+}
+
+.btn-check:active+.btn-primary:focus, .btn-check:checked+.btn-primary:focus, .btn-primary.active:focus, .btn-primary:active:focus, .show>.btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.25rem rgb(253 49 49 / 50%);
+}
+
+.nav-with-pad {
+	padding-bottom: 1rem;
+}
+
+.container-delimiter {
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+}
+
+.footer-fix {
+	background-color: black;
+	margin-top: 0rem;
+    margin-bottom: 0rem;
+	padding-bottom: 3rem;
+	color: #ffffff;
+}
+
+.a-red {
+	color: #ff6363
+}
+
+.a-red:hover {
+	color: #ff2323
+}
+
+#welcome {
+	max-width: 72em;
+}
+
+.container-welcome {
+	padding-right: 5rem;
+	padding-left: 5rem;
+}
+
+.pad-for-everyone {
+	padding-bottom: 3rem;
+}
+
+.less-pad-for-everyone {
+	padding-bottom: 1rem;
+}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.79.0">
+    <title>Signin</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
+	
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <!-- Bootstrap core CSS -->
+	<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="css/signin.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+  </head>
+  <body class="text-center">
+  
+<main class="form-signin my-card card-max-width">
+  <form class="needs-validation" novalidate>
+    <img class="btn btn-lg mb-4" id="logo" src="assets/brand/bootstrap-logo.svg" alt="" height="257">
+    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+	
+<nav class="nav-with-pad">
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="a-red nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Student</a>
+    <a class="a-red nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Administration</a> 
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+    <label for="inputID-Student" class="visually-hidden">Student</label>
+    <input type="number" id="inputID-Student" class="form-control" min="100000" max="999999" placeholder="Student" required autofocus>
+	<nav class="nav-with-pad"></nav>
+    <label for="inputPassword-Student" class="visually-hidden">Password</label>
+    <input type="password" id="inputPassword-Student" class="form-control" minlength="3" maxlength="25" pattern="[A-Za-z0-9]+" placeholder="Password" required>
+	<hr>
+    <button class="w-100 btn btn-lg btn-primary" onclick="loginStudent()" type="submit">Sign in</button>
+  </div>
+  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+     <label for="inputID-Employee" class="visually-hidden">Employee</label>
+    <input type="text" id="inputID-Employee" class="form-control" minlength="3" maxlength="25" pattern="(?!(^[0-9]{6}$))([A-Za-z0-9]+)" placeholder="Employee" required autofocus>
+	<nav class="nav-with-pad"></nav>
+    <label for="inputPassword-Employee" class="visually-hidden">Password</label>
+    <input type="password" id="inputPassword-Employee" class="form-control" minlength="3" maxlength="25" pattern="[A-Za-z0-9]+" placeholder="Password" required>
+	<hr>
+    <button class="w-100 btn btn-lg btn-primary" onclick="loginEmployee()" type="submit">Sign in</button>
+  </div>
+</div>
+
+    <p class="mt-5 mb-3 text-muted">&copy; 2020 - 2525</p>
+  </form>
+</main>
+
+	<script src="javascript/login.js"></script>
+	
+    <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+	
+	
+  </body>
+</html>
