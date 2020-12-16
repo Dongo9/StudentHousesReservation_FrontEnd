@@ -2,10 +2,8 @@ import os
 import sys
 from dataclasses import field, InitVar, dataclass
 from typing import Callable, List, Dict, Optional, Any
-
 from typeguard import typechecked
 from valid8 import validate, ValidationError
-
 from StudentHousesReservation_FrontEnd.validation.dataclasses import validate_dataclass
 from StudentHousesReservation_FrontEnd.validation.regex import pattern
 
@@ -95,7 +93,7 @@ class Menu:
                 return entry.is_exit
             except (KeyError, TypeError, ValueError):
                 print('Invalid selection. Please, try again...')
-            #except ValidationError: #A CAUSA DELLA VALIDATION SONO DOVUTO INTERVENIRE --> MA SICCOME NON MI DEVO REGISTRARE, E' FONDAMENTALE SOLLEVARE ECCEZIONE?
+            # except ValidationError: #A CAUSA DELLA VALIDATION SONO DOVUTO INTERVENIRE --> MA SICCOME NON MI DEVO REGISTRARE, E' FONDAMENTALE SOLLEVARE ECCEZIONE?
             #    print('Illegal access detected!')
             #    os._exit(0)
 
