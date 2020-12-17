@@ -47,7 +47,7 @@ class App:
     def __student_login(self) -> None:
         try:
             student = self.__read_student_credentials()  # LEGGE LE CREDENZIALI
-            if self.__check_credentials(student):  # CHECK SULLE CREDENZIALI, SE VA BENE ALLORA ACCEDI AL MENU STUDENTE
+            if self.__database.check_credentials(student):  # CHECK SULLE CREDENZIALI, SE VA BENE ALLORA ACCEDI AL MENU STUDENTE
                 print('Successful login')
                 print()
                 self.__logged_in_student = student.matriculation_number
@@ -59,12 +59,7 @@ class App:
             print('Access failed: please, choose to login and retry with correct credentials...')
             print()
 
-    def __check_credentials(self, stud: Student) -> bool:
-        for i in range(self.__database.students_size()):  # CHECK SULLA CORRISPONDENZA TRA I VARI STUDENTI
-            st = self.__database.student(i)
-            if st.__eq__(stud):
-                return True
-        return False
+
 
     def __read_student_credentials(self) -> Student:  # LETTURA CREDENZIALI STUDENT
         matriculation_number = self.__read('Matriculation Number', str)
@@ -128,7 +123,7 @@ class App:
     def __admins_login(self) -> None: #EQUIVALENTE DI STUDENTE
         try:
             admin = self.__read_admin_credentials()
-            if self.__check_admin_credentials(admin):
+            if self.__database.check_admin_credentials(admin):
                 print('Successful login')
                 print()
                 self.__switch_to_admins_menu()
@@ -143,13 +138,6 @@ class App:
         matriculation_number = self.__read('Matriculation Number', str)
         password = self.__read('Password', str)
         return Admin(matriculation_number, password)
-
-    def __check_admin_credentials(self, admin: Admin) -> bool: #EQUIVALENTE DI STUDENTE
-        for i in range(self.__database.admins_size()):
-            ad = self.__database.admin(i)
-            if ad.__eq__(admin):
-                return True
-        return False
 
     ########################################### MENU PRINCIPALE ################################################
 

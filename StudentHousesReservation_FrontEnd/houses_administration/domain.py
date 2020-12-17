@@ -139,3 +139,17 @@ class Database:
     def get_personal_reservation(self, matriculation: str) -> Reservation:
         validate('matriculation', matriculation, is_in=self.__reservations)
         return self.__reservations[matriculation]
+
+    def check_credentials(self, stud: Student) -> bool:
+        for i in range(self.students_size()):  # CHECK SULLA CORRISPONDENZA TRA I VARI STUDENTI
+            st = self.student(i)
+            if st.__eq__(stud):
+                return True
+        return False
+
+    def check_admin_credentials(self, admin: Admin) -> bool: #EQUIVALENTE DI STUDENTE
+        for i in range(self.admins_size()):
+            ad = self.admin(i)
+            if ad.__eq__(admin):
+                return True
+        return False
