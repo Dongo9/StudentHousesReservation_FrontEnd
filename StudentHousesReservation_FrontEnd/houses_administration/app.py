@@ -1,13 +1,14 @@
-import copy
 import csv
 import os
 import sys
 from pathlib import Path
 from typing import Any, Tuple, Callable
+import uuid
+import hashlib
 
+from py import std
 from valid8 import validate, ValidationError
 
-# TODO STAMPE DI ERRORE NON FUNZIONANO (CAUSA VALIDAZIONI)
 from StudentHousesReservation_FrontEnd.houses_administration.domain import Database, Student, Reservation, Admin
 from StudentHousesReservation_FrontEnd.houses_administration.menu import Menu, Entry, Description
 
@@ -29,7 +30,6 @@ class App:
         try:
             self.__load_students()
         except ValueError as e:
-            #print(e)
             print('--------------------------------------------')
             print('Continuing with an empty list of students...')
             print('--------------------------------------------')
@@ -37,13 +37,12 @@ class App:
         try:
             self.__load_admins()
         except ValueError as e:
-            #print(e)
             print('------------------------------------------')
             print('Continuing with an empty list of admins...')
             print('------------------------------------------')
         self.__logged_in_student = None
 
-    ################################################################ STUDENT ####################################################################
+    # ######################################### STUDENT ###############################################
 
     def __student_login(self) -> None:
         try:
@@ -245,15 +244,33 @@ class App:
             for key, value in self.__database.reservations().items():
                 writer.writerow([value.neighbourhood, value.room, key])
 
+    def hash_password(self, password):
+        # uuid is used to generate a random number
+        salt = uuid.uuid4().hex
+        return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
+
+    def check_password(self, hashed_password, user_password):
+        password, salt = hashed_password.split(':')
+        return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
+
     @staticmethod
     def __read(prompt: str, builder: Callable) -> Any:
-        while True:
-            try:
-                line = input(f'{prompt}: ')
-                res = builder(line.strip())
-                return res
-            except (TypeError, ValueError, ValidationError) as e:
-                print(e)
+        if prompt == 'Password':
+            while True:
+                try:
+                    line = hashlib.sha256(input(f'{prompt}: ').encode('utf-8')).hexdigest()
+                    res = builder(line.strip())
+                    return res
+                except (TypeError, ValueError, ValidationError) as e:
+                    print(e)
+        else:
+            while True:
+                try:
+                    line = line = input(f'{prompt}: ')
+                    res = builder(line.strip())
+                    return res
+                except (TypeError, ValueError, ValidationError) as e:
+                    print(e)
 
     def __read_reservation(self) -> Reservation:
         neighbourhood = self.__read('Neighbourhood (choose between these ones):\n'

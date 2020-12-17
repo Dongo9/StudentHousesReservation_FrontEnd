@@ -35,10 +35,10 @@ def reservations():
 @pytest.fixture
 def students():
     students = [
-        ['223965', 'Manuel95.m'],
-        ['223955', 'Paolop97.p'],
-        ['223963', 'Carlop94.c'],
-        ['666777', 'Malvi30L.m'],
+        ['223965', 'd26c7c71c302511fb6d4564db191ef78357796d06da6520411b0f29f17575e7e'],  # pass : 'Manuel95.m'],
+        ['223955', 'd25843dda285d2f190aeabe68d4a72ece38f6398f44d995734d4527190eb4766'],  # pass : 'Paolop97.p'],
+        ['223963', '5ec057110db886a9196dc1d61bbd3a828465227b57c68570c2ad62f417bdbea1'],  # pass : 'Carlop94.c'],
+        ['666777', '222860a94573964a00d861ef18f15e7e328721c325f438f402c92aac9d30a43f'],  # pass : 'Malvi30L.m'],
     ]
     return '\n'.join(['\t'.join(d) for d in students])
 
@@ -46,9 +46,9 @@ def students():
 @pytest.fixture
 def admins():
     admins = [
-        ['333965', 'AdmManuel95.m'],
-        ['333955', 'AdmPaolop97.p'],
-        ['333963', 'AdmCarlop94.c'],
+        ['333965', 'e2225cbaa0dbb73e7b3351239901b8449612c479a85a66183a9e3d27ef762b79'],  # pass : 'AdmManuel95.m'],
+        ['333955', '81b4dd632617586ad2dcc67ee84dd57956b6b85b283dcddfffa68020cd0f4ca5'],  # pass : 'AdmPaolop97.p'],
+        ['333963', '3cd55af9821debcf053e9219674a7a919a8ed11916c230187cda073138e1f978'],  # pass : 'AdmCarlop94.c'],
     ]
     return '\n'.join(['\t'.join(d) for d in admins])
 
@@ -73,12 +73,11 @@ def test_app_handles_corrupted_datafile(mocked_print, mocked_input, mock_path):
     mocked_print.assert_any_call('Continuing with an empty list of students...')
     mocked_print.assert_any_call('Continuing with an empty list of admins...')
     mocked_print.assert_any_call('Continuing with an empty list of reservations...')
-    mocked_input.assert_called()
 
 
-#@patch('builtins.input', side_effect=['0'])
-#@patch('builtins.print')
-#def test_app_global_exception_handler(mocked_print, mocked_input):
+# @patch('builtins.input', side_effect=['0'])
+# @patch('builtins.print')
+# def test_app_global_exception_handler(mocked_print, mocked_input):
 #    with patch.object(Path, 'exists') as mocked_path_exits:
 #        mocked_path_exits.side_effect = Mock(side_effect=Exception('Test'))
 #        App().run()
@@ -175,6 +174,7 @@ def test_app_student_view_his_reservation(mocked_print, mocked_input, mock_path,
     mocked_print.assert_any_call('Bye!')
     mocked_input.assert_called()
 
+
 @patch('builtins.input', side_effect=['1', '666777', 'Malvi30L.m', '2', '0', '0'])
 @patch('builtins.print')
 def test_app_student_has_no_reservation(mocked_print, mocked_input, mock_path, reservations):
@@ -188,13 +188,14 @@ def test_app_student_has_no_reservation(mocked_print, mocked_input, mock_path, r
     mocked_print.assert_any_call('Bye!')
     mocked_input.assert_called()
 
+
 @patch('builtins.input', side_effect=['2', '333965', 'AdmManuel95.m', '1', '0', '0'])
 @patch('builtins.print')
-#@patch('builtins.open', side_effect=[students, admins, reservations])
+# @patch('builtins.open', side_effect=[students, admins, reservations])
 def test_app_admin_view_all_reservation(mocked_print, mocked_input, mock_path, students, admins, reservations):
-    #with patch('builtins.open', mock_open()):
+    # with patch('builtins.open', mock_open()):
     App().run()
-    #sys.stdout.write(str(mocked_print.call_args_list) + '\n')
+    # sys.stdout.write(str(mocked_print.call_args_list) + '\n')
 
     mocked_print.assert_any_call('*** Student houses reservations platform ***')
     mocked_print.assert_any_call('2:\tLogin as administrator')

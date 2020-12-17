@@ -47,7 +47,7 @@ class Admin:
     def __post_init__(self):
         validate_dataclass(self)
         validate('matriculation_number', self.matriculation_number, min_len=6, max_len=6, custom=pattern(r'[0-9]+'))
-        validate('password', self.password, min_len=10, max_len=15, custom=pattern(r'[A-Za-z.0-9]+'))
+        validate('password', self.password, min_len=10, max_len=10000, custom=pattern(r'[A-Za-z.0-9]+'))
 
     def __str__(self):
         return self.matriculation_number + ' ' + self.password
@@ -67,7 +67,7 @@ class Student:
     def __post_init__(self):
         validate_dataclass(self)
         validate('matriculation_number', self.matriculation_number, min_len=6, max_len=6, custom=pattern(r'[0-9]+'))
-        validate('password', self.password, min_len=10, max_len=15, custom=pattern(r'[A-Za-z.0-9]+'))
+        validate('password', self.password, min_len=10, max_len=10000, custom=pattern(r'[A-Za-z.0-9]+'))
 
     def __str__(self):
         return self.matriculation_number + ' ' + self.password

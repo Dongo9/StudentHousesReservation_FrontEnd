@@ -28,7 +28,7 @@ def test_admin_wrong_matric_number_format():
 
 
 def test_admin_wrong_password_format():
-    wrong_values = ['lessten', 'morethanfifteencharacters', 'betweenlenbut!']
+    wrong_values = ['lessten',  'betweenlenbut!']
     for value in wrong_values:
         with pytest.raises(ValidationError):
             Admin('192859', value)
@@ -61,7 +61,7 @@ def test_student_wrong_matric_number_format():
 
 
 def test_student_wrong_password_format():
-    wrong_values = ['lessten', 'morethanfifteencharacters', 'betweenlenbut!']
+    wrong_values = ['lessten', 'betweenlenbut!']
     for value in wrong_values:
         with pytest.raises(ValidationError):
             Student('192859', value)
