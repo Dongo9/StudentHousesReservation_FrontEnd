@@ -10,7 +10,7 @@ from StudentHousesReservation_FrontEnd.validation.regex import pattern
 
 @typechecked
 @dataclass(order=True, frozen=True)
-class Description:
+class Description: #DEFINIZIONE DI CLASSE DESCRIPTION PER IL MENU
     value: str
 
     def __post_init__(self):
@@ -23,7 +23,7 @@ class Description:
 
 @typechecked
 @dataclass(order=True, frozen=True)
-class Key:
+class Key: #DEFINIZIONE DI CLASSE KEY PER LA SELEZIONE DELLE OPZIONI
     value: str
 
     def __post_init__(self):
@@ -36,7 +36,7 @@ class Key:
 
 @typechecked
 @dataclass(frozen=True)
-class Entry:
+class Entry: #DEFINIZIONE DI CLASSE ENTRY PER ABBINARLA AD UNA KEY
     key: Key
     description: Description
     on_selected: Callable[[], None] = field(default=lambda: None)
@@ -53,7 +53,7 @@ class Entry:
 
 @typechecked
 @dataclass(frozen=True)
-class Menu:
+class Menu: #DEFINIZIONE FINALE DELLA CLASSE MENU'
     description: Description
     auto_select: Callable[[], None] = field(default=lambda: None)
     __entries: List[Entry] = field(default_factory=list, repr=False, init=False)
@@ -93,9 +93,6 @@ class Menu:
                 return entry.is_exit
             except (KeyError, TypeError, ValueError):
                 print('Invalid selection. Please, try again...')
-            # except ValidationError: #A CAUSA DELLA VALIDATION SONO DOVUTO INTERVENIRE --> MA SICCOME NON MI DEVO REGISTRARE, E' FONDAMENTALE SOLLEVARE ECCEZIONE?
-            #    print('Illegal access detected!')
-            #    os._exit(0)
 
     def run(self) -> None:
         while True:
@@ -106,7 +103,7 @@ class Menu:
 
     @typechecked
     @dataclass()
-    class Builder:
+    class Builder: #BUILDER CON FLUENT INTERFACE PER COSTRUIRE ABILMENTE MENU
         __menu: Optional['Menu']
         __create_key = object()
 

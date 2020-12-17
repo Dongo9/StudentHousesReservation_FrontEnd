@@ -9,12 +9,12 @@ from StudentHousesReservation_FrontEnd.validation.dataclasses import validate_da
 from StudentHousesReservation_FrontEnd.validation.regex import pattern
 
 
-class Room(Enum):
+class Room(Enum): #ENUM CONTENENTE I VARI TIPI DI STANZA
     SINGLE = 'SINGLE'
     DOUBLE = 'DOUBLE'
 
 
-class Neighbourhood(Enum):
+class Neighbourhood(Enum): #ENUM CONTENENTE I VARI QUARTIERI DISPONIBILI
     NERVOSO = 'NERVOSO'
     MARTENSSONA = 'MARTENSSONA'
     MARTENSSONB = 'MARTENSSONB'
@@ -40,7 +40,7 @@ class Apartment:
 
 @typechecked
 @dataclass(frozen=True, order=True)
-class Admin:
+class Admin: #CLASSE ADMIN
     matriculation_number: str
     password: str
 
@@ -60,7 +60,7 @@ class Admin:
 
 @typechecked
 @dataclass(frozen=True, order=True)
-class Student:
+class Student: #CLASSE STUDENT
     matriculation_number: str
     password: str
 
@@ -80,7 +80,7 @@ class Student:
 
 @typechecked
 @dataclass(frozen=True, order=True)
-class Reservation:
+class Reservation: #CLASSE RESERVATION
     neighbourhood: str
     room: str
 
@@ -96,11 +96,11 @@ class Reservation:
 @typechecked
 @dataclass(frozen=True)
 class Database:
-    __reservations: Dict[str, Reservation] = field(default_factory=dict, repr=False, init=False)
+    __reservations: Dict[str, Reservation] = field(default_factory=dict, repr=False, init=False) #DICTIONARY PER LE RESERVATIONS
 
-    __students: List[Student] = field(default_factory=list, init=False)
+    __students: List[Student] = field(default_factory=list, init=False) #LISTA PER GLI STUDENTI
 
-    __admins: List[Admin] = field(default_factory=list, init=False)
+    __admins: List[Admin] = field(default_factory=list, init=False) #LISTA PER GLI ADMINS
 
     def number_of_reservations(self) -> int:
         return len(self.__reservations)
