@@ -17,20 +17,20 @@ api_server = 'http://localhost:8000/api/v1/'
 
 
 class App:
-    __filename = Path(__file__).parent.parent / 'reservations.csv'  # PERCORSO FILE RESERVATIONS
-    __studentsf = Path(__file__).parent.parent / 'students.csv'  # PERCORSO FILE STUDENTI
-    __adminsf = Path(__file__).parent.parent / 'admins.csv'  # PERCORSO FILE ADMINS
-    __delimiter = '\t'
+    # __filename = Path(__file__).parent.parent / 'reservations.csv'  # PERCORSO FILE RESERVATIONS
+    # __studentsf = Path(__file__).parent.parent / 'students.csv'  # PERCORSO FILE STUDENTI
+    # __adminsf = Path(__file__).parent.parent / 'admins.csv'  # PERCORSO FILE ADMINS
+    # __delimiter = '\t'
     __key = None
 
     def __init__(self):
         self.__menu = Menu.Builder(Description('Student houses reservations platform'),
                                    auto_select=lambda: None) \
             .with_entry(Entry.create('1', 'Login as student', on_selected=lambda: self.__student_login())) \
-            .with_entry(Entry.create('2', 'Login as employee', on_selected=lambda: self.__admins_login())) \
+            .with_entry(Entry.create('2', 'Login as employee', on_selected=lambda: self.__employee_login())) \
             .with_entry(Entry.create('0', 'Exit', on_selected=lambda: print('Bye!'), is_exit=True)) \
             .build()  # BUILDER PER LA COSTRUZIONE DEL MENU PRINCIPALE
-        self.__database = Database()  # DICHIARO UN OGGETTO DATABASE
+        # self.__database = Database()  # DICHIARO UN OGGETTO DATABASE
         self.__logged_in_student = None  # OGGETTO PER TENERE TRACCIA DELL'UTENTE LOGGATO (salvo solo matricola)
 
     # ######################################### STUDENT ###############################################
@@ -47,6 +47,7 @@ class App:
                 print()
                 self.__logged_in_student = student
                 self.__key = res.json()['key']
+                #print(self.__key)
                 self.__switch_to_students_menu()
             else:
                 print('No account found with these credentials')
@@ -94,10 +95,10 @@ class App:
                             print('I, lets go!')
                             print()
                     except ValidationError:
-                        print('Invalid key entered, please choose to add a new reservation and retry with a correct one...')
+                        print(
+                            'Invalid key entered, please choose to add a new reservation and retry with a correct one...')
                         print()
                         return
-
 
                     reservation_id = res.json()[0]['id']
 
@@ -145,7 +146,7 @@ class App:
 
     ########################################### ADMIN ####################################################
 
-    def __admins_login(self) -> None:  # EQUIVALENTE DI STUDENTE
+    def __employee_login(self) -> None:  # EQUIVALENTE DI STUDENTE
         try:
             employee = self.__read_admin_credentials()
 
@@ -156,6 +157,7 @@ class App:
                 print('SUCCESSFUL LOGIN')
                 print()
                 self.__key = res.json()['key']
+                print(self.__key)
                 self.__switch_to_admins_menu()
 
             else:
@@ -172,17 +174,17 @@ class App:
 
     ########################################### MENU PRINCIPALE ################################################
 
-    def __load_admins(self):  # CARICO ADMIN
-        if not Path(self.__adminsf).exists():
-            return
-
-        with open(self.__adminsf) as file:
-            reader = csv.reader(file, delimiter=self.__delimiter)  # DICHIARA LETTORE FILE .CSV
-            for row in reader:  # PER OGNI RIGA, INDIVIDUA LA TUPLA DA MEMORIZZARE
-                validate('row length', row, length=2)
-                matriculation_number = row[0]
-                password = row[1]
-                self.__database.add_admin(Employee(matriculation_number, password))
+    # def __load_admins(self):  # CARICO ADMIN
+    #    if not Path(self.__adminsf).exists():
+    #        return
+    #
+    #    with open(self.__adminsf) as file:
+    #        reader = csv.reader(file, delimiter=self.__delimiter)  # DICHIARA LETTORE FILE .CSV
+    #        for row in reader:  # PER OGNI RIGA, INDIVIDUA LA TUPLA DA MEMORIZZARE
+    #            validate('row length', row, length=2)
+    #            matriculation_number = row[0]
+    #            password = row[1]
+    #            self.__database.add_admin(Employee(matriculation_number, password))
 
     def __print_reservations(self) -> None:  # STAMPO RESERVATIONS GENERALI
 
@@ -220,13 +222,6 @@ class App:
         self.__menu.run()
 
     def __run(self) -> None:  # RUN PER AVVIARE L'APPLICAZIONE
-        try:
-            self.__load()
-        except ValueError as e:
-            # print(e)
-            print('------------------------------------------------')
-            print('Continuing with an empty list of reservations...')
-            print('------------------------------------------------')
         self.__menu.run()
 
     def run(self) -> None:
@@ -235,36 +230,36 @@ class App:
         except:
             print('Panic error!', file=sys.stderr)
 
-    def __load_students(self) -> None:  # CARICA STUDENTI
-        if not Path(self.__studentsf).exists():
-            return
+    # def __load_students(self) -> None:  # CARICA STUDENTI
+    #    if not Path(self.__studentsf).exists():
+    #        return
+    #
+    #    with open(self.__studentsf) as file:
+    #        reader = csv.reader(file, delimiter=self.__delimiter)  # DICHIARA LETTORE FILE .CSV
+    #        for row in reader:  # PER OGNI RIGA, INDIVIDUA LA TUPLA DA MEMORIZZARE
+    #            validate('row length', row, length=2)
+    #            matriculation_number = row[0]
+    #            password = row[1]
+    #            self.__database.add_student(Student(matriculation_number, password))
 
-        with open(self.__studentsf) as file:
-            reader = csv.reader(file, delimiter=self.__delimiter)  # DICHIARA LETTORE FILE .CSV
-            for row in reader:  # PER OGNI RIGA, INDIVIDUA LA TUPLA DA MEMORIZZARE
-                validate('row length', row, length=2)
-                matriculation_number = row[0]
-                password = row[1]
-                self.__database.add_student(Student(matriculation_number, password))
+    # def __load(self) -> None:  # LOAD RESERVATIONS
+    #    if not Path(self.__filename).exists():  # SE IL PATH NON ESISTE, ALLORA NADA
+    #        return
+    #
+    #    with open(self.__filename) as file:  # APRE IL FLUSSO
+    #        reader = csv.reader(file, delimiter=self.__delimiter)  # DICHIARA LETTORE FILE .CSV
+    #        for row in reader:  # PER OGNI RIGA, INDIVIDUA LA TUPLA DA MEMORIZZARE
+    #            validate('row length', row, length=3)
+    #            neighbourhood = row[0]
+    #            room = row[1]
+    #            student = row[2]
+    #            self.__database.add_reservation(student, Reservation(neighbourhood, room))
 
-    def __load(self) -> None:  # LOAD RESERVATIONS
-        if not Path(self.__filename).exists():  # SE IL PATH NON ESISTE, ALLORA NADA
-            return
-
-        with open(self.__filename) as file:  # APRE IL FLUSSO
-            reader = csv.reader(file, delimiter=self.__delimiter)  # DICHIARA LETTORE FILE .CSV
-            for row in reader:  # PER OGNI RIGA, INDIVIDUA LA TUPLA DA MEMORIZZARE
-                validate('row length', row, length=3)
-                neighbourhood = row[0]
-                room = row[1]
-                student = row[2]
-                self.__database.add_reservation(student, Reservation(neighbourhood, room))
-
-    def __save(self) -> None:  # SALVA LE RESERVATIONS SU FILE PRENDENDOLE DA RESERVATIONS DEL DB
-        with open(self.__filename, 'w') as file:
-            writer = csv.writer(file, delimiter=self.__delimiter, lineterminator='\n')
-            for key, value in self.__database.reservations().items():
-                writer.writerow([value.neighbourhood, value.room, key])
+    # def __save(self) -> None:  # SALVA LE RESERVATIONS SU FILE PRENDENDOLE DA RESERVATIONS DEL DB
+    #    with open(self.__filename, 'w') as file:
+    #        writer = csv.writer(file, delimiter=self.__delimiter, lineterminator='\n')
+    #        for key, value in self.__database.reservations().items():
+    #            writer.writerow([value.neighbourhood, value.room, key])
 
     def hash_password(self, password):  # UTILITY PER HASHARE LA PASSWORD CON SHA-256
         # uuid is used to generate a random number

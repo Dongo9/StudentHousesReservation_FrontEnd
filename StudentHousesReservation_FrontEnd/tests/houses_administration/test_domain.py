@@ -104,31 +104,31 @@ def test_reservation_str():
     assert not re.__str__() == 'NRVA SIN'
 
 
-@pytest.fixture
-def admins():
-    return [
-        Employee('112233', '12345678910'),
-        Employee('123456', '1122334455'),
-        Employee('111222', '10987654321'),
-    ]
-
-
-@pytest.fixture
-def students():
-    return [
-        Student('112233', '12345678910'),
-        Student('123456', '1122334455'),
-        Student('111222', '10987654321'),
-    ]
-
-
-@pytest.fixture
-def preferences():
-    return [
-        Reservation('NERVOSO', 'DOUBLE'),
-        Reservation('MARTENSSONA', 'SINGLE'),
-        Reservation('MOLICELLEA', 'SINGLE'),
-    ]
+#@pytest.fixture
+#def admins():
+#    return [
+#        Employee('112233', '12345678910'),
+#        Employee('123456', '1122334455'),
+#        Employee('111222', '10987654321'),
+#    ]
+#
+#
+#@pytest.fixture
+#def students():
+#    return [
+#        Student('112233', '12345678910'),
+#        Student('123456', '1122334455'),
+#        Student('111222', '10987654321'),
+#    ]
+#
+#
+#@pytest.fixture
+#def preferences():
+#    return [
+#        Reservation('NERVOSO', 'DOUBLE'),
+#        Reservation('MARTENSSONA', 'SINGLE'),
+#        Reservation('MOLICELLEA', 'SINGLE'),
+#    ]
 
 
 #def test_database_add_student(students):
@@ -192,21 +192,21 @@ def preferences():
     #db.add_reservation(s2.matriculation_number, r2)
     #db.add_reservation(s3.matriculation_number, r3)
 
-    with pytest.raises(ValidationError):
-        db.student(-1)
-    with pytest.raises(ValidationError):
-        db.student(100)
-    with pytest.raises(TypeError):
-        db.student('asdsads')
-
-    with pytest.raises(ValidationError):
-        db.admin(-1)
-    with pytest.raises(ValidationError):
-        db.admin(100)
-    with pytest.raises(TypeError):
-        db.admin('asdsads')
-
-    with pytest.raises(ValidationError):
-        db.get_personal_reservation('123')
-    with pytest.raises(ValidationError):
-        db.get_personal_reservation('123555')
+   # with pytest.raises(ValidationError):
+   #     db.student(-1)
+   # with pytest.raises(ValidationError):
+   #     db.student(100)
+   # with pytest.raises(TypeError):
+   #     db.student('asdsads')
+#
+   # with pytest.raises(ValidationError):
+   #     db.admin(-1)
+   # with pytest.raises(ValidationError):
+   #     db.admin(100)
+   # with pytest.raises(TypeError):
+   #     db.admin('asdsads')
+#
+   # with pytest.raises(ValidationError):
+   #     db.get_personal_reservation('123')
+   # with pytest.raises(ValidationError):
+   #     db.get_personal_reservation('123555')
