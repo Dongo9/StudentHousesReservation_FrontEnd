@@ -40,7 +40,7 @@ class Apartment:
 
 @typechecked
 @dataclass(frozen=True, order=True)
-class Employee: #CLASSE ADMIN #TODO RINOMINARE IN EMPLOYEE
+class Employee:
     username: str
     password: str
 
@@ -73,7 +73,7 @@ class Student: #CLASSE STUDENT
         return self.matriculation_number + ' ' + self.password
 
     def __eq__(self, other):
-        if self.matriculation_number == other.username and self.password == other.password:
+        if self.matriculation_number == other.matriculation_number and self.password == other.password:
             return True
         return False
 
