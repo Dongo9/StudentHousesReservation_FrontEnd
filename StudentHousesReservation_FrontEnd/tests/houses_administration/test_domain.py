@@ -17,34 +17,34 @@ def test_apartment_str():
 
 
 def test_admin_correct_values():
-    Admin('123456', '12345678910')
+    Employee('123456', '12345678910')
 
 
 def test_admin_wrong_matric_number_format():
     wrong_values = ['AAA', '123', 'A12', '12345', '1234567']
     for value in wrong_values:
         with pytest.raises(ValidationError):
-            Admin(value, '12345678910')
+            Employee(value, '12345678910')
 
 
 def test_admin_wrong_password_format():
     wrong_values = ['lessten',  'betweenlenbut!']
     for value in wrong_values:
         with pytest.raises(ValidationError):
-            Admin('192859', value)
+            Employee('192859', value)
 
 
 def test_admin_eq():
-    ad = Admin('182959', 'ciaobellissimi')
-    ad1 = Admin('182959', 'ciaobellissimi')
-    ad2 = Admin('182959', 'ciaobellissime')
+    ad = Employee('182959', 'ciaobellissimi')
+    ad1 = Employee('182959', 'ciaobellissimi')
+    ad2 = Employee('182959', 'ciaobellissime')
 
     assert ad.__eq__(ad1)
     assert not ad.__eq__(ad2)
 
 
 def test_admin_str():
-    ad = Admin('182959', 'ciaobellissimi')
+    ad = Employee('182959', 'ciaobellissimi')
     assert ad.__str__() == '182959 ciaobellissimi'
     assert not ad.__str__() == '182959ciaobellissimi'
 
@@ -107,9 +107,9 @@ def test_reservation_str():
 @pytest.fixture
 def admins():
     return [
-        Admin('112233', '12345678910'),
-        Admin('123456', '1122334455'),
-        Admin('111222', '10987654321'),
+        Employee('112233', '12345678910'),
+        Employee('123456', '1122334455'),
+        Employee('111222', '10987654321'),
     ]
 
 
@@ -176,9 +176,9 @@ def test_database_validate_wrong_input():
     s1 = Student('112233', '12345678910')
     s2 = Student('123456', '1122334455')
     s3 = Student('111222', '10987654321')
-    a1 = Admin('112233', '12345678910')
-    a2 = Admin('123456', '1122334455')
-    a3 = Admin('111222', '10987654321')
+    a1 = Employee('112233', '12345678910')
+    a2 = Employee('123456', '1122334455')
+    a3 = Employee('111222', '10987654321')
     r1 = Reservation('NERVOSO', 'DOUBLE')
     r2 = Reservation('MARTENSSONA', 'SINGLE')
     r3 = Reservation('MOLICELLEA', 'SINGLE')
