@@ -230,37 +230,6 @@ class App:
         except:
             print('Panic error!', file=sys.stderr)
 
-    # def __load_students(self) -> None:  # CARICA STUDENTI
-    #    if not Path(self.__studentsf).exists():
-    #        return
-    #
-    #    with open(self.__studentsf) as file:
-    #        reader = csv.reader(file, delimiter=self.__delimiter)  # DICHIARA LETTORE FILE .CSV
-    #        for row in reader:  # PER OGNI RIGA, INDIVIDUA LA TUPLA DA MEMORIZZARE
-    #            validate('row length', row, length=2)
-    #            matriculation_number = row[0]
-    #            password = row[1]
-    #            self.__database.add_student(Student(matriculation_number, password))
-
-    # def __load(self) -> None:  # LOAD RESERVATIONS
-    #    if not Path(self.__filename).exists():  # SE IL PATH NON ESISTE, ALLORA NADA
-    #        return
-    #
-    #    with open(self.__filename) as file:  # APRE IL FLUSSO
-    #        reader = csv.reader(file, delimiter=self.__delimiter)  # DICHIARA LETTORE FILE .CSV
-    #        for row in reader:  # PER OGNI RIGA, INDIVIDUA LA TUPLA DA MEMORIZZARE
-    #            validate('row length', row, length=3)
-    #            neighbourhood = row[0]
-    #            room = row[1]
-    #            student = row[2]
-    #            self.__database.add_reservation(student, Reservation(neighbourhood, room))
-
-    # def __save(self) -> None:  # SALVA LE RESERVATIONS SU FILE PRENDENDOLE DA RESERVATIONS DEL DB
-    #    with open(self.__filename, 'w') as file:
-    #        writer = csv.writer(file, delimiter=self.__delimiter, lineterminator='\n')
-    #        for key, value in self.__database.reservations().items():
-    #            writer.writerow([value.neighbourhood, value.room, key])
-
     def hash_password(self, password):  # UTILITY PER HASHARE LA PASSWORD CON SHA-256
         # uuid is used to generate a random number
         salt = uuid.uuid4().hex
