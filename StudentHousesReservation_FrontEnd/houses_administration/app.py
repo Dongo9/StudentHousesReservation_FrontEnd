@@ -1,8 +1,6 @@
-import requests
 import sys
-from typing import Any, Callable
-import uuid
-import hashlib
+
+import requests
 from valid8 import validate, ValidationError
 
 from StudentHousesReservation_FrontEnd.houses_administration.domain import Student, Reservation, Employee
@@ -197,34 +195,6 @@ class App:
             self.__run()
         except:
             print('Panic error!', file=sys.stderr)
-
-    # def hash_password(self, password):  # UTILITY PER HASHARE LA PASSWORD CON SHA-256
-    # uuid is used to generate a random number
-    #    salt = uuid.uuid4().hex
-    #    return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
-
-    # def check_password(self, hashed_password, user_password):  # CHECK SE LA PASSWORD CORRISPONDE A QUELLA NEL DB
-    #    password, salt = hashed_password.split(':')
-    #    return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
-
-    # @staticmethod  # METODO STATICO PER LEGGERE L'INPUT E HASHARE LA PASSWORD
-    # def __read(prompt: str, builder: Callable) -> Any:
-    #    if prompt == 'Password':
-    #        while True:
-    #           try:
-    #               line = hashlib.sha256(input(f'{prompt}: ').encode('utf-8')).hexdigest()
-    #               res = builder(line.strip())
-    #              return res
-    #         except (TypeError, ValueError, ValidationError) as e:
-    #            print(e)
-    # else:
-    #    while True:
-    #        try:
-    #            line = line = input(f'{prompt}: ')
-    #            res = builder(line.strip())
-    #            return res
-    #        except (TypeError, ValueError, ValidationError) as e:
-    #            print(e)
 
     def __read_reservation(self) -> Reservation:  # LEGGE DA INPUT LA NUOVA RESERVATION
         neighbourhood = input('Neighbourhood (choose between these ones, inserting corresponding number):\n'
