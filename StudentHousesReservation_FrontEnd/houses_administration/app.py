@@ -1,26 +1,17 @@
-import csv
 import requests
 import sys
-from pathlib import Path
-from typing import Any, Tuple, Callable
+from typing import Any, Callable
 import uuid
 import hashlib
-
-from py import std
 from valid8 import validate, ValidationError
 
-from StudentHousesReservation_FrontEnd.houses_administration.domain import Database, Student, Reservation, Employee, \
-    Neighbourhood
+from StudentHousesReservation_FrontEnd.houses_administration.domain import Student, Reservation, Employee
 from StudentHousesReservation_FrontEnd.houses_administration.menu import Menu, Entry, Description
 
 api_server = 'http://localhost:8000/api/v1/'
 
 
 class App:
-    # __filename = Path(__file__).parent.parent / 'reservations.csv'  # PERCORSO FILE RESERVATIONS
-    # __studentsf = Path(__file__).parent.parent / 'students.csv'  # PERCORSO FILE STUDENTI
-    # __adminsf = Path(__file__).parent.parent / 'admins.csv'  # PERCORSO FILE ADMINS
-    # __delimiter = '\t'
     __key = None
 
     def __init__(self):
@@ -29,8 +20,7 @@ class App:
             .with_entry(Entry.create('1', 'Login as student', on_selected=lambda: self.__student_login())) \
             .with_entry(Entry.create('2', 'Login as employee', on_selected=lambda: self.__employee_login())) \
             .with_entry(Entry.create('0', 'Exit', on_selected=lambda: print('Bye!'), is_exit=True)) \
-            .build()  # BUILDER PER LA COSTRUZIONE DEL MENU PRINCIPALE
-        # self.__database = Database()  # DICHIARO UN OGGETTO DATABASE
+            .build()
         self.__logged_in_student = None  # OGGETTO PER TENERE TRACCIA DELL'UTENTE LOGGATO (salvo solo matricola)
 
     # ######################################### STUDENT ###############################################
@@ -47,7 +37,6 @@ class App:
                 print()
                 self.__logged_in_student = student
                 self.__key = res.json()['key']
-                #print(self.__key)
                 self.__switch_to_students_menu()
             else:
                 print('No account found with these credentials')
@@ -96,7 +85,8 @@ class App:
                             print()
                     except ValidationError:
                         print(
-                            'Invalid key entered, please choose to add a new reservation and retry with a correct one...')
+                            'Invalid key entered, please choose to add a new reservation and retry with a correct '
+                            'one...')
                         print()
                         return
 
@@ -112,8 +102,8 @@ class App:
                     else:
                         print('Something went wrong with reservation updating...')
             return
-        except ValidationError:
-            print('Invalid key entered, please choose to add a new reservation and retry with a correct one...')
+        except (ValidationError, ValueError):
+            print('Invalid keys entered: please, choose to add a new reservation and retry with correct ones')
             print()
             return
 
@@ -174,18 +164,6 @@ class App:
 
     ########################################### MENU PRINCIPALE ################################################
 
-    # def __load_admins(self):  # CARICO ADMIN
-    #    if not Path(self.__adminsf).exists():
-    #        return
-    #
-    #    with open(self.__adminsf) as file:
-    #        reader = csv.reader(file, delimiter=self.__delimiter)  # DICHIARA LETTORE FILE .CSV
-    #        for row in reader:  # PER OGNI RIGA, INDIVIDUA LA TUPLA DA MEMORIZZARE
-    #            validate('row length', row, length=2)
-    #            matriculation_number = row[0]
-    #            password = row[1]
-    #            self.__database.add_admin(Employee(matriculation_number, password))
-
     def __print_reservations(self) -> None:  # STAMPO RESERVATIONS GENERALI
 
         res = requests.get(url=f'{api_server}reservation-list/', headers={'Authorization': f'Token {self.__key}'})
@@ -230,51 +208,51 @@ class App:
         except:
             print('Panic error!', file=sys.stderr)
 
-    def hash_password(self, password):  # UTILITY PER HASHARE LA PASSWORD CON SHA-256
+    #def hash_password(self, password):  # UTILITY PER HASHARE LA PASSWORD CON SHA-256
         # uuid is used to generate a random number
-        salt = uuid.uuid4().hex
-        return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
+    #    salt = uuid.uuid4().hex
+    #    return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
 
-    def check_password(self, hashed_password, user_password):  # CHECK SE LA PASSWORD CORRISPONDE A QUELLA NEL DB
-        password, salt = hashed_password.split(':')
-        return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
+    #def check_password(self, hashed_password, user_password):  # CHECK SE LA PASSWORD CORRISPONDE A QUELLA NEL DB
+    #    password, salt = hashed_password.split(':')
+    #    return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
 
-    @staticmethod  # METODO STATICO PER LEGGERE L'INPUT E HASHARE LA PASSWORD
-    def __read(prompt: str, builder: Callable) -> Any:
-        if prompt == 'Password':
-            while True:
-                try:
-                    line = hashlib.sha256(input(f'{prompt}: ').encode('utf-8')).hexdigest()
-                    res = builder(line.strip())
-                    return res
-                except (TypeError, ValueError, ValidationError) as e:
-                    print(e)
-        else:
-            while True:
-                try:
-                    line = line = input(f'{prompt}: ')
-                    res = builder(line.strip())
-                    return res
-                except (TypeError, ValueError, ValidationError) as e:
-                    print(e)
+    #@staticmethod  # METODO STATICO PER LEGGERE L'INPUT E HASHARE LA PASSWORD
+    #def __read(prompt: str, builder: Callable) -> Any:
+    #    if prompt == 'Password':
+    #        while True:
+     #           try:
+     #               line = hashlib.sha256(input(f'{prompt}: ').encode('utf-8')).hexdigest()
+     #               res = builder(line.strip())
+      #              return res
+       #         except (TypeError, ValueError, ValidationError) as e:
+        #            print(e)
+        #else:
+        #    while True:
+        #        try:
+        #            line = line = input(f'{prompt}: ')
+        #            res = builder(line.strip())
+        #            return res
+        #        except (TypeError, ValueError, ValidationError) as e:
+        #            print(e)
 
     def __read_reservation(self) -> Reservation:  # LEGGE DA INPUT LA NUOVA RESERVATION
-        neighbourhood = self.__read('Neighbourhood (choose between these ones, inserting corresponding number):\n'
-                                    '1: NERVOSO\n'
-                                    '2: MARTENSSONA\n'
-                                    '3: MARTENSSONB\n'
-                                    '4: MOLICELLEA\n'
-                                    '5: MOLICELLEB\n'
-                                    '6: MAISONETTES\n'
-                                    '7: CHIODO1\n'
-                                    '8: CHIODO2\n'
-                                    '9: MONACI\n'
-                                    '10: SANGENNARO\n', int)
-        room_type = self.__read('Room (choose between SINGLE AND DOUBLE):\n'
-                                '1: SINGLE\n'
-                                '2: DOUBLE\n', int)
+        neighbourhood = input('Neighbourhood (choose between these ones, inserting corresponding number):\n'
+                              '1: NERVOSO\n'
+                              '2: MARTENSSONA\n'
+                              '3: MARTENSSONB\n'
+                              '4: MOLICELLEA\n'
+                              '5: MOLICELLEB\n'
+                              '6: MAISONETTES\n'
+                              '7: CHIODO1\n'
+                              '8: CHIODO2\n'
+                              '9: MONACI\n'
+                              '10: SANGENNARO\n')
+        room_type = input('Room (choose between SINGLE AND DOUBLE):\n'
+                          '1: SINGLE\n'
+                          '2: DOUBLE\n')
 
-        switcherNeigh = {
+        switcher_neigh = {
             1: "NRV",
             2: "MTA",
             3: "MTB",
@@ -287,13 +265,13 @@ class App:
             10: "SNG"
         }
 
-        switcherRoom = {
+        switcher_room = {
             1: "SIN",
             2: "DBL"
         }
 
-        return Reservation(switcherNeigh.get(neighbourhood, 'invalid neighbourhood'),
-                           switcherRoom.get(room_type, 'invalid room type'))
+        return Reservation(switcher_neigh.get(int(neighbourhood), 'invalid neighbourhood'),
+                           switcher_room.get(int(room_type), 'invalid room type'))
 
 
 def main(name: str):

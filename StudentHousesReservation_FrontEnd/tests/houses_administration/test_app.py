@@ -21,85 +21,6 @@ def mock_response(status_code, data=[]):
     return res
 
 
-# @pytest.fixture
-# def mock_path():
-#    Path.exists = Mock()
-#    Path.exists.return_value = True
-#    return Path
-#
-#
-# @pytest.fixture
-# def multi_mock_open(*file_contents):
-#    mock_files = [mock_open(read_data=content).return_value for content in file_contents]
-#    mock_opener = mock_open()
-#    mock_opener.side_effect = mock_files
-#    return mock_opener
-#
-#
-# @pytest.fixture
-# def reservations():
-#    reservations = [
-#        ['NERVOSO', 'SINGLE', '223965'],
-#        ['MARTENSSONA', 'DOUBLE', '223955'],
-#        ['CHIODO1', 'SINGLE', '223666'],
-#    ]
-#    return '\n'.join(['\t'.join(d) for d in reservations])
-#
-#
-# @pytest.fixture
-# def students():
-#    students = [
-#        ['223965', 'd26c7c71c302511fb6d4564db191ef78357796d06da6520411b0f29f17575e7e'],  # pass : 'Manuel95.m'],
-#        ['223955', 'd25843dda285d2f190aeabe68d4a72ece38f6398f44d995734d4527190eb4766'],  # pass : 'Paolop97.p'],
-#        ['223963', '5ec057110db886a9196dc1d61bbd3a828465227b57c68570c2ad62f417bdbea1'],  # pass : 'Carlop94.c'],
-#        ['666777', '222860a94573964a00d861ef18f15e7e328721c325f438f402c92aac9d30a43f'],  # pass : 'Malvi30L.m'],
-#    ]
-#    return '\n'.join(['\t'.join(d) for d in students])
-#
-#
-# @pytest.fixture
-# def employees():
-#    employees = [
-#        ['333965', 'e2225cbaa0dbb73e7b3351239901b8449612c479a85a66183a9e3d27ef762b79'],  # pass : 'AdmManuel95.m'],
-#        ['333955', '81b4dd632617586ad2dcc67ee84dd57956b6b85b283dcddfffa68020cd0f4ca5'],  # pass : 'AdmPaolop97.p'],
-#        ['333963', '3cd55af9821debcf053e9219674a7a919a8ed11916c230187cda073138e1f978'],  # pass : 'AdmCarlop94.c'],
-#    ]
-#    return '\n'.join(['\t'.join(d) for d in employees])
-#
-
-# @patch('builtins.input', side_effect=['0'])
-# @patch('builtins.print')
-# @patch('builtins.open', side_effect=[students, employees, reservations])
-# def test_app_load_datafile(mocked_print, mocked_input, mock_path, students, employees, reservations):
-#    with patch('builtins.open', mock_open()):
-#        App().run()
-#    sys.stdout.write(str(mocked_print.call_args_list) + '\n')
-#
-#    mock_path.exists.call_count == 3
-#    mocked_input.assert_called()
-#
-
-# @patch('builtins.input', side_effect=['0'])
-# @patch('builtins.print')
-# def test_app_handles_corrupted_datafile(mocked_print, mocked_input, mock_path):
-#    with patch('builtins.open', mock_open(read_data='xyz')):
-#        App().run()
-#    mocked_print.assert_any_call('Continuing with an empty list of students...')
-#    mocked_print.assert_any_call('Continuing with an empty list of employees...')
-#    mocked_print.assert_any_call('Continuing with an empty list of reservations...')
-
-
-# @patch('builtins.input', side_effect=['0'])
-# @patch('builtins.print')
-# def test_app_global_exception_handler(mocked_print, mocked_input):
-#    with patch.object(Path, 'exists') as mocked_path_exits:
-#        mocked_path_exits.side_effect = Mock(side_effect=Exception('Test'))
-#        App().run()
-#    sys.stdout.write(str(mocked_print.call_args_list) + '\n')
-#    assert mocked_input.mock_calls == []
-#    assert list(filter(lambda x: 'Panic error!' in str(x), mocked_print.mock_calls))
-
-
 @patch('builtins.input', side_effect=['0'])
 @patch('builtins.print')
 def test_app_main(mocked_print, mocked_input):
@@ -145,7 +66,7 @@ def test_app_login_employee(mocked_print, mocked_input, mocked_requests_post):
 @patch('requests.get', side_effect=[])
 @patch('builtins.input', side_effect=['1', '170013', 'manuelito'])
 @patch('builtins.print')
-def test_app_panic_error(mocked_print, mocked_input,mocked_requests_get):
+def test_app_panic_error(mocked_print, mocked_input, mocked_requests_get):
     App().run()
     sys.stdout.write(str(mocked_print.call_args_list) + '\n')
     assert list(filter(lambda x: 'Panic error!' in str(x), mocked_print.mock_calls))
@@ -223,11 +144,9 @@ def test_app_student_wrong_reservation_added_wrong_format(mocked_print, mocked_i
     mocked_print.assert_any_call('SUCCESSFUL LOGIN')
     mocked_print.assert_any_call('*** Students panel ***')
     assert len(list(filter(lambda
-                               x: 'invalid literal' in str(
-        x), mocked_print.mock_calls))) == 1
-    assert len(list(filter(lambda
-                               x: 'Invalid key entered, please choose to add a new reservation and retry with a '
-                                  'correct one...' in str(x), mocked_print.mock_calls))) == 3
+                               x: 'Invalid keys entered: please, choose to add a new reservation and retry with '
+                                  'correct ones'
+                                  in str(x), mocked_print.mock_calls))) == 3
     mocked_print.assert_any_call('Successfully logged out from the system!')
     mocked_print.assert_any_call('Bye!')
     mocked_input.assert_called()
