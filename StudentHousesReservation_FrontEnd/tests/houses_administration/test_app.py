@@ -115,12 +115,11 @@ def test_app_student_fails_to_add_first_reservation(mocked_print, mocked_input, 
     mocked_print.assert_any_call('0:\tExit')
     mocked_print.assert_any_call('SUCCESSFUL LOGIN')
     mocked_print.assert_any_call('*** Students panel ***')
-    # sys.stdout.write(str(mocked_print.call_args_list) + '\n')
     mocked_print.assert_any_call('Your new preferences will overwrite the previous ones, do you now? Y/N')
     mocked_print.assert_any_call('I, lets go!')
     assert len(list(filter(lambda
-                               x: 'Invalid key entered, please choose to add a new reservation and retry with a '
-                                  'correct one...' in str(x), mocked_print.mock_calls))) == 2
+                               x: 'Invalid keys entered: please, choose to add a new reservation and retry with correct ones'
+                                  in str(x), mocked_print.mock_calls))) == 2
     assert len(list(filter(lambda
                                x: 'Your new preferences will overwrite the previous ones, do you now? Y/N' in str(x),
                            mocked_print.mock_calls))) == 5

@@ -1,6 +1,5 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import List, Dict
 
 from typeguard import typechecked
 from valid8 import validate
@@ -25,18 +24,6 @@ class Neighbourhood(Enum): #ENUM CONTENENTE I VARI QUARTIERI DISPONIBILI
     CHIODO2 = 'CH2'
     MONACI = 'MON'
     SANGENNARO = 'SNG'
-
-
-@typechecked
-@dataclass(frozen=True, order=True)
-class Apartment:
-    name: str
-    rooms: List[Room] = field(default_factory=list, init=False)
-
-    def __post_init__(self):
-        validate_dataclass(self)
-        validate('name', self.name, min_len=2, max_len=3, custom=pattern(r'[A-Z][1-9]{1,2}'))
-
 
 @typechecked
 @dataclass(frozen=True, order=True)
@@ -91,65 +78,3 @@ class Reservation: #CLASSE RESERVATION
 
     def __str__(self):
         return self.neighbourhood + ' ' + self.room
-
-
-@typechecked
-@dataclass(frozen=True)
-class Database:
-    __reservations: Dict[str, Reservation] = field(default_factory=dict, repr=False, init=False) #DICTIONARY PER LE RESERVATIONS
-
-    __students: List[Student] = field(default_factory=list, init=False) #LISTA PER GLI STUDENTI
-
-    __admins: List[Employee] = field(default_factory=list, init=False) #LISTA PER GLI ADMINS
-
-    #def number_of_reservations(self) -> int:
-    #    return len(self.__reservations)
-#
-    #def students_size(self) -> int:
-    #    return len(self.__students)
-#
-    #def admins_size(self) -> int:
-    #    return len(self.__admins)
-#
-    #def add_reservation(self, stud: str, res: Reservation) -> None:
-    #    self.__reservations[stud] = res
-#
-    #def add_student(self, stud: Student) -> None:
-    #    self.__students.append(stud)
-#
-    #def add_admin(self, adm: Employee) -> None:
-    #    self.__admins.append(adm)
-#
-    #def reservations(self) -> Dict[str, Reservation]:
-    #    return self.__reservations.copy()  # PER EVITARE MANOMISSIONI ESTERNE (COME CLONE IN JAVA)
-#
-    #def student(self, index: int) -> Student:
-    #    validate('index', index, min_value=0, max_value=self.students_size() - 1)
-    #    return self.__students[index]
-#
-    #def admin(self, index: int) -> Employee:
-    #    validate('index', index, min_value=0, max_value=self.admins_size() - 1)
-    #    return self.__admins[index]
-#
-    #def has_already_reservation(self, stud: str) -> bool:
-    #    if stud in self.__reservations:
-    #        return True
-    #    return False
-#
-    #def get_personal_reservation(self, matriculation: str) -> Reservation:
-    #    validate('matriculation', matriculation, is_in=self.__reservations)
-    #    return self.__reservations[matriculation]
-#
-    #def check_credentials(self, stud: Student) -> bool:
-    #    for i in range(self.students_size()):  # CHECK SULLA CORRISPONDENZA TRA I VARI STUDENTI
-    #        st = self.student(i)
-    #        if st.__eq__(stud):
-    #            return True
-    #    return False
-#
-    #def check_admin_credentials(self, admin: Employee) -> bool: #EQUIVALENTE DI STUDENTE
-    #    for i in range(self.admins_size()):
-    #        ad = self.admin(i)
-    #        if ad.__eq__(admin):
-    #            return True
-    #    return False

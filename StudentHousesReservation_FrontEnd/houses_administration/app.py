@@ -21,7 +21,6 @@ class App:
             .with_entry(Entry.create('2', 'Login as employee', on_selected=lambda: self.__employee_login())) \
             .with_entry(Entry.create('0', 'Exit', on_selected=lambda: print('Bye!'), is_exit=True)) \
             .build()
-        self.__logged_in_student = None  # OGGETTO PER TENERE TRACCIA DELL'UTENTE LOGGATO (salvo solo matricola)
 
     # ######################################### STUDENT ###############################################
 
@@ -75,20 +74,13 @@ class App:
 
                     print('Your new preferences will overwrite the previous ones, do you now? Y/N')
                     val = input()
-                    try:
-                        validate('value', val, is_in=['Y', 'N'])
-                        if val == 'N':
-                            print()
-                            return
-                        elif val == 'Y':
-                            print('I, lets go!')
-                            print()
-                    except ValidationError:
-                        print(
-                            'Invalid key entered, please choose to add a new reservation and retry with a correct '
-                            'one...')
+                    validate('value', val, is_in=['Y', 'N'])
+                    if val == 'N':
                         print()
                         return
+                    elif val == 'Y':
+                        print('I, lets go!')
+                        print()
 
                     reservation_id = res.json()[0]['id']
 
@@ -130,7 +122,6 @@ class App:
             return
 
     def __logout(self) -> None:  # EFFETTUA IL LOGOUT DELL''UTENTE
-        self.__logged_in_student = None
         print('Successfully logged out from the system!')
         print()
 
@@ -147,7 +138,6 @@ class App:
                 print('SUCCESSFUL LOGIN')
                 print()
                 self.__key = res.json()['key']
-                print(self.__key)
                 self.__switch_to_admins_menu()
 
             else:
@@ -208,33 +198,33 @@ class App:
         except:
             print('Panic error!', file=sys.stderr)
 
-    #def hash_password(self, password):  # UTILITY PER HASHARE LA PASSWORD CON SHA-256
-        # uuid is used to generate a random number
+    # def hash_password(self, password):  # UTILITY PER HASHARE LA PASSWORD CON SHA-256
+    # uuid is used to generate a random number
     #    salt = uuid.uuid4().hex
     #    return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
 
-    #def check_password(self, hashed_password, user_password):  # CHECK SE LA PASSWORD CORRISPONDE A QUELLA NEL DB
+    # def check_password(self, hashed_password, user_password):  # CHECK SE LA PASSWORD CORRISPONDE A QUELLA NEL DB
     #    password, salt = hashed_password.split(':')
     #    return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
 
-    #@staticmethod  # METODO STATICO PER LEGGERE L'INPUT E HASHARE LA PASSWORD
-    #def __read(prompt: str, builder: Callable) -> Any:
+    # @staticmethod  # METODO STATICO PER LEGGERE L'INPUT E HASHARE LA PASSWORD
+    # def __read(prompt: str, builder: Callable) -> Any:
     #    if prompt == 'Password':
     #        while True:
-     #           try:
-     #               line = hashlib.sha256(input(f'{prompt}: ').encode('utf-8')).hexdigest()
-     #               res = builder(line.strip())
-      #              return res
-       #         except (TypeError, ValueError, ValidationError) as e:
-        #            print(e)
-        #else:
-        #    while True:
-        #        try:
-        #            line = line = input(f'{prompt}: ')
-        #            res = builder(line.strip())
-        #            return res
-        #        except (TypeError, ValueError, ValidationError) as e:
-        #            print(e)
+    #           try:
+    #               line = hashlib.sha256(input(f'{prompt}: ').encode('utf-8')).hexdigest()
+    #               res = builder(line.strip())
+    #              return res
+    #         except (TypeError, ValueError, ValidationError) as e:
+    #            print(e)
+    # else:
+    #    while True:
+    #        try:
+    #            line = line = input(f'{prompt}: ')
+    #            res = builder(line.strip())
+    #            return res
+    #        except (TypeError, ValueError, ValidationError) as e:
+    #            print(e)
 
     def __read_reservation(self) -> Reservation:  # LEGGE DA INPUT LA NUOVA RESERVATION
         neighbourhood = input('Neighbourhood (choose between these ones, inserting corresponding number):\n'
